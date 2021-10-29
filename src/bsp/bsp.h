@@ -11,6 +11,7 @@
 
 #include "def.h"
 #include "stm32f1xx_hal.h"
+#include "usb_device.h"
 
 void bspInit(void);
 void delay(uint32_t ms);

@@ -7,6 +7,9 @@
 
 
 #include "ap.h"
+#include "usbd_cdc_if.h"
+
+//extern uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 
 void apInit(void)
 {
@@ -36,6 +39,8 @@ void apMain(void)
 
     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     delay(500);
+
+    CDC_Transmit_FS("test\n", 5);
 
   }
 
