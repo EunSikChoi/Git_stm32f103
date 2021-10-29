@@ -34,35 +34,47 @@ void apInit(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  uartOpen(_DEF_UART1, 57600);
+
+
 }
 
 
 void apMain(void)
 {
-	  uint32_t pre_time;
+    uint32_t pre_time;
+    uint32_t pre_baud;
 
-	    pre_time = millis();
 
-		while(1)
-		{
+    pre_baud = uartGetBaud(_DEF_UART1);
+    pre_time = millis();
 
-		  if(millis()-pre_time >= 1000)
-		  {
-			pre_time = millis();
-			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-		  }
+	while(1)
+	{
 
-		  if(cdcAvailable() > 0)
-		  {
-			uint8_t rx_data;
+	  if(millis()-pre_time >= 1000)
+	  {
+		pre_time = millis();
+		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+	  }
 
-			rx_data = cdcRead();
-			cdcWrite((uint8_t *)"RxData : ", 10);
-			cdcWrite(&rx_data, 1);
-			cdcWrite((uint8_t *)"\n", 2);
-		  }
+	  if(uartAvailable(_DEF_UART1) > 0)
+	  {
+		uint8_t rx_data;
 
-		}
+		rx_data = uartRead(_DEF_UART1);
+
+		uartPrintf(_DEF_UART1, "RxData : %c 0x%x\n", rx_data, rx_data);
+
+	  }
+
+	  if(uartGetBaud(_DEF_UART1) != pre_baud)
+	  {
+		pre_baud = uartGetBaud(_DEF_UART1);
+		uartPrintf(_DEF_UART1, "ChangedBaud : %d\n", uartGetBaud(_DEF_UART1));
+	  }
+
+	}
 
 
 }
