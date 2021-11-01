@@ -72,7 +72,7 @@ void apMain(void)
          uint8_t rx_data;
 
          rx_data = uartRead(_DEF_UART2);
-         uartPrintf(_DEF_UART2, "UART2 Rx: %c %x\n", rx_data, rx_data);
+         uartPrintf(_DEF_UART2, "UART2_DMA Rx: %c %x\n", rx_data, rx_data);
       }
 
 

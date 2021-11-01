@@ -17,6 +17,7 @@ void bspInit(void)
   HAL_Init();
   SystemClock_Config();
 
+  __HAL_RCC_GPIOA_CLK_ENABLE();// A 클럭은 USB_CDC 이기 떄문에 여기서 활성화 안하면 아래 초기화 수행 안됨 //
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
