@@ -35,6 +35,7 @@ void apInit(void)
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   uartOpen(_DEF_UART1, 57600);
+  uartOpen(_DEF_UART2, 57600);
 
 
 }
@@ -56,6 +57,10 @@ void apMain(void)
 	  {
 		pre_time = millis();
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+
+		uartPrintf(_DEF_UART2, "Uart1 %d\n", millis());
+
+
 	  }
 
 	  if(uartAvailable(_DEF_UART1) > 0)

@@ -14,6 +14,7 @@
 #include "bsp.h"
 
 
+#define _USE_HW_CDC
 
 #define _USE_HW_UART
 #define      HW_UART_MAX_CH          1
