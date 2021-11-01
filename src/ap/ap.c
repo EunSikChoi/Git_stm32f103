@@ -37,7 +37,6 @@ void apInit(void)
   uartOpen(_DEF_UART1, 57600);
   uartOpen(_DEF_UART2, 57600);
 
-
 }
 
 
@@ -57,10 +56,6 @@ void apMain(void)
 	  {
 		pre_time = millis();
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-
-		uartPrintf(_DEF_UART2, "Uart1 %d\n", millis());
-
-
 	  }
 
 	  if(uartAvailable(_DEF_UART1) > 0)
@@ -68,10 +63,18 @@ void apMain(void)
 		uint8_t rx_data;
 
 		rx_data = uartRead(_DEF_UART1);
-
 		uartPrintf(_DEF_UART1, "RxData : %c 0x%x\n", rx_data, rx_data);
 
 	  }
+
+      if(uartAvailable(_DEF_UART2) > 0)
+      {
+         uint8_t rx_data;
+
+         rx_data = uartRead(_DEF_UART2);
+         uartPrintf(_DEF_UART2, "UART2 Rx: %c %x\n", rx_data, rx_data);
+      }
+
 
 	  if(uartGetBaud(_DEF_UART1) != pre_baud)
 	  {

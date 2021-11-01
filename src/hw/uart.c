@@ -12,19 +12,17 @@
 
 #include "uart.h"
 #include "cdc.h"
+#include "qbuffer.h"
 
 
 static bool is_open[UART_MAX_CH];
 
+static qbuffer_t qbuffer[UART_MAX_CH];
+
+static uint8_t rx_buf[256]; 	 	  // qbuffer buf
+static uint8_t rx_data[UART_MAX_CH];  // rx INT buf
+
 UART_HandleTypeDef huart1;
-
-//extern uint32_t cdcAvailable(void);
-//extern uint8_t cdcRead(void);
-//extern void cdcDataIn(uint8_t rx_data);
-//extern uint32_t cdcWrite(uint8_t *p_data, uint32_t length);
-//extern uint32_t cdcGetBaud(void);
-
-
 
 
 bool uartInit(void)
@@ -59,16 +57,24 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 	  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
 
-	  if (HAL_UART_Init(&huart1) != HAL_OK)
-	  {
-		ret = false;
-	  }
-	  else
-	  {
-		ret = true;
-	    is_open[ch] = true;
-	  }
-	break;
+      qbufferCreate(&qbuffer[_DEF_UART2], &rx_buf[0], 256);
+
+
+      if (HAL_UART_Init(&huart1) != HAL_OK)
+      {
+        ret = false;
+      }
+      else
+      {
+        ret = true;
+        is_open[ch] = true;
+
+        if(HAL_UART_Receive_IT(&huart1, (uint8_t *)&rx_data[_DEF_UART2], 1) != HAL_OK) // start IT
+        {
+          ret = false;
+        }
+      }
+      break;
 
   }
 
@@ -83,7 +89,11 @@ uint32_t uartAvailable(uint8_t ch)
   switch(ch)
   {
     case _DEF_UART1:
-    ret = cdcAvailable();
+    	ret = cdcAvailable();
+    break;
+
+    case _DEF_UART2:
+      ret = qbufferAvailable(&qbuffer[_DEF_UART2]);
     break;
   }
 
@@ -98,8 +108,13 @@ uint8_t  uartRead(uint8_t ch)
    switch(ch)
    {
      case _DEF_UART1:
-     ret = cdcRead();
+       ret = cdcRead();
      break;
+
+     case _DEF_UART2:
+       qbufferRead(&qbuffer[_DEF_UART2], &ret, 1);
+     break;
+
    }
 
    return ret;
@@ -115,7 +130,7 @@ uint32_t uartWrite(uint8_t ch, uint8_t *p_data, uint32_t length)
   switch(ch)
   {
     case _DEF_UART1:
-    ret = cdcWrite(p_data, length);
+    	ret = cdcWrite(p_data, length);
     break;
 
     case _DEF_UART2:
@@ -123,7 +138,7 @@ uint32_t uartWrite(uint8_t ch, uint8_t *p_data, uint32_t length)
 
 	  if(status == HAL_OK)
 	  {
-		  ret = length;
+		ret = length;
 	  }
 
 	break;
@@ -168,6 +183,28 @@ uint32_t uartGetBaud(uint8_t ch)
 
 }
 
+
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+  if(huart->Instance == USART1)
+  {
+
+  }
+
+}
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if(huart->Instance == USART1)
+  {
+    qbufferWrite(&qbuffer[_DEF_UART2], &rx_data[_DEF_UART2] , 1);
+
+    HAL_UART_Receive_IT(&huart1, (uint8_t *)&rx_data[_DEF_UART2], 1) ; // Re enable IT
+
+  }
+}
 
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 {
