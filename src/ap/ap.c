@@ -46,6 +46,7 @@ void apMain(void)
     uint32_t pre_baud;
     uint8_t rx_buf[128];
     uint32_t rx_len;
+    bool ret = false;
 
 
     pre_baud = uartGetBaud(_DEF_UART1);
@@ -62,9 +63,14 @@ void apMain(void)
 
 	  if(uartGetBaud(_DEF_UART1) != uartGetBaud(_DEF_UART2))
 	  {
-		  uartOpen(_DEF_UART2, uartGetBaud(_DEF_UART1));
-	  }
+		  ret = uartOpen(_DEF_UART2, uartGetBaud(_DEF_UART1)); // follow cdc baudrate
 
+		  if(ret == 1)
+		  {
+			  uartPrintf(_DEF_UART1, "baud ok \n");
+			  uartPrintf(_DEF_UART1, "CH1_baud : %d , CH2_baud : %d\n",  uartGetBaud(_DEF_UART1), uartGetBaud(_DEF_UART2));
+		  }
+	  }
 
 	  //USB--> UART
 	  rx_len = uartAvailable(_DEF_UART1);
@@ -116,10 +122,10 @@ void apMain(void)
       }
 
 
-	  if(uartGetBaud(_DEF_UART1) != pre_baud)
+	  if(uartGetBaud(_DEF_UART2) != pre_baud)
 	  {
-		pre_baud = uartGetBaud(_DEF_UART1);
-		uartPrintf(_DEF_UART1, "ChangedBaud : %d\n", uartGetBaud(_DEF_UART1));
+		pre_baud = uartGetBaud(_DEF_UART2);
+		uartPrintf(_DEF_UART2, "ChangedBaud_2 : %d\n", uartGetBaud(_DEF_UART2));
 	  }
 #endif
 	}
