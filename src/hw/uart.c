@@ -58,6 +58,8 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 	  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
 
+	  HAL_UART_DeInit(&huart1);
+
       qbufferCreate(&qbuffer[_DEF_UART2], &rx_buf[0], 256);
 
       __HAL_RCC_DMA1_CLK_ENABLE();
@@ -188,8 +190,12 @@ uint32_t uartGetBaud(uint8_t ch)
   switch(ch)
   {
     case _DEF_UART1:
-    ret = cdcGetBaud();
+      ret = cdcGetBaud();
     break;
+
+    case _DEF_UART2:
+	  ret = huart1.Init.BaudRate;
+	break;
   }
 
   return ret;
