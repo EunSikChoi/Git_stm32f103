@@ -12,6 +12,7 @@
 
 #include "hw_def.h"
 #include "uart.h"
+#include "flash.h"
 
 void hwInit(void);
 

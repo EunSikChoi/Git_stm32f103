@@ -14,4 +14,6 @@ void hwInit(void)
 
   uartInit();
 
+  flashInit();
+
 }

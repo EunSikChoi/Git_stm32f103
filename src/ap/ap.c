@@ -56,8 +56,77 @@ void apMain(void)
 	  {
 		pre_time = millis();
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-		logPrintf("log print test %d\n", (int)millis());
+
 	  }
+
+      if(uartAvailable(_DEF_UART1) > 0)
+      {
+        uint8_t rx_data;
+
+        rx_data = uartRead(_DEF_UART1);
+
+
+        if(rx_data == '1')  //READ
+        {
+           uint8_t buf[32];
+
+           logPrintf("Read...\n");
+
+           flashRead(FLASH_USER_START_ADDR , buf, FLASH_USER_LENGTH); //LEN 단위 : 1바이트 크기
+           //flashRead(0x8000000 + (60*1024) , buf, 32);
+           for ( int i = 0; i < 32 ; i++)
+           {
+            // logPrintf("0x%X : 0x%X\n", 0x8000000 + (60*1024) + i, buf[i]);
+             logPrintf("0x%X : 0x%X\n", (int32_t)FLASH_USER_START_ADDR + i, buf[i]);
+           }
+
+           rx_data = 0;
+
+        }
+        if(rx_data == '2')  // ERASE
+        {
+          logPrintf("Erase...\n");
+
+          if(flashErase(FLASH_USER_START_ADDR , FLASH_USER_LENGTH) == true)
+          //if(flashErase(0x8000000 + (60*1024) , 32) == true)
+          {
+            logPrintf("Erase OK\n");
+          }
+          else
+          {
+            logPrintf("Erase Fail\n");
+          }
+
+          rx_data = 0;
+
+        }
+        if (rx_data == '3')  // WRITE
+        {
+          uint8_t buf[32];
+
+          for (int i=0; i<32; i++) //써야할 데이터 32바이트 생성
+          {
+            buf[i] = i;
+          }
+
+          logPrintf("Write...\n");
+
+          if (flashWrite(FLASH_USER_START_ADDR, buf, FLASH_USER_LENGTH) == true)
+          //if (flashWrite(0x8000000 + (60*1024), buf, 32) == true)
+          {
+            logPrintf("Wrtie OK\n");
+          }
+          else
+          {
+            logPrintf("Write Fail\n");
+          }
+
+          rx_data = 0;
+        }
+
+
+      }
+
 	}
 
 
