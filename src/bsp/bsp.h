@@ -17,6 +17,8 @@ void bspInit(void);
 void delay(uint32_t ms);
 uint32_t millis(void);
 
+#define logPrintf(fmt, ...) printf(fmt, ##__VA_ARGS__)
+
 void Error_Handler(void);
 
 

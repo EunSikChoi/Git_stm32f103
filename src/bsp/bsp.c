@@ -53,6 +53,14 @@ uint32_t millis(void)
 
 }
 
+int __io_putchar(int ch)
+{
+  //USB로 printf 전송
+  uartWrite(_DEF_UART1, (uint8_t *)&ch, 1);
+
+  return 1;
+}
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};

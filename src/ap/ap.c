@@ -44,9 +44,7 @@ void apMain(void)
 {
     uint32_t pre_time;
     uint32_t pre_baud;
-    uint8_t rx_buf[128];
-    uint32_t rx_len;
-    bool ret = false;
+
 
 
     pre_baud = uartGetBaud(_DEF_UART1);
@@ -54,80 +52,12 @@ void apMain(void)
 
 	while(1)
 	{
-
 	  if(millis()-pre_time >= 1000)
 	  {
 		pre_time = millis();
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+		logPrintf("log print test %d\n", (int)millis());
 	  }
-
-	  if(uartGetBaud(_DEF_UART1) != uartGetBaud(_DEF_UART2))
-	  {
-		  ret = uartOpen(_DEF_UART2, uartGetBaud(_DEF_UART1)); // follow cdc baudrate
-
-		  if(ret == 1)
-		  {
-			  uartPrintf(_DEF_UART1, "baud ok \n");
-			  uartPrintf(_DEF_UART1, "CH1_baud : %d , CH2_baud : %d\n",  uartGetBaud(_DEF_UART1), uartGetBaud(_DEF_UART2));
-		  }
-	  }
-
-	  //USB--> UART
-	  rx_len = uartAvailable(_DEF_UART1);
-	  if(rx_len > 128)
-	  {
-		rx_len = 128;
-	  }
-	  if(rx_len > 0)
-	  {
-		for(int i = 0; i < rx_len; i++)
-		{
-		  rx_buf[i] = uartRead(_DEF_UART1);
-		}
-		uartWrite(_DEF_UART2, rx_buf, rx_len);
-	  }
-
-	  //UART -->USB
-	  rx_len = uartAvailable(_DEF_UART2);
-	  if(rx_len > 128)
-	  {
-		rx_len = 128;
-	  }
-	  if(rx_len > 0)
-	  {
-		for(int i = 0; i < rx_len; i++)
-		{
-		  rx_buf[i] = uartRead(_DEF_UART2);
-		}
-		uartWrite(_DEF_UART1, rx_buf, rx_len);
-	  }
-
-
-#if 0
-	  if(uartAvailable(_DEF_UART1) > 0)
-	  {
-		uint8_t rx_data;
-
-		rx_data = uartRead(_DEF_UART1);
-		uartPrintf(_DEF_UART1, "RxData : %c 0x%x\n", rx_data, rx_data);
-
-	  }
-
-      if(uartAvailable(_DEF_UART2) > 0)
-      {
-         uint8_t rx_data;
-
-         rx_data = uartRead(_DEF_UART2);
-         uartPrintf(_DEF_UART2, "UART2_DMA Rx: %c %x\n", rx_data, rx_data);
-      }
-
-
-	  if(uartGetBaud(_DEF_UART2) != pre_baud)
-	  {
-		pre_baud = uartGetBaud(_DEF_UART2);
-		uartPrintf(_DEF_UART2, "ChangedBaud_2 : %d\n", uartGetBaud(_DEF_UART2));
-	  }
-#endif
 	}
 
 

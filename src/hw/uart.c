@@ -168,16 +168,15 @@ uint32_t uartWrite(uint8_t ch, uint8_t *p_data, uint32_t length)
 uint32_t uartPrintf(uint8_t ch, char *fmt, ...)  // #include <stdarg.h> 추가해야 가능 //
 {
   char buf[256];
-  va_list args;  						// memory address , args 이름으로 포인트 설정 //
+  va_list args;  						// memory address , args 이름으로 포인트 설정 // 포인터 변수 생성
   int len;
   uint32_t ret;
 
-  va_start(args, fmt); 					//arg에 fmt(가변크기) 만큼 크기 설정
-  len = vsnprintf(buf, 256, fmt, args); // 가변인자 문자 출력  //(버퍼주소, 크키 , 가변인자크기, 가변인자 메모리주소)
+  va_start(args, fmt); 					// 가변인자중 첫번째 인자의 주소를 가르킴 // 즉 시작 주소 지정 //
+  len = vsnprintf(buf, 256, fmt, args); // 가변인자 문자 출력  //(fmt에 만들어진 내용이 담길 버퍼, 최대크키 , 포멧, 가변인자 시작주소) // 리턴값은 길이 //
   ret = uartWrite(ch, (uint8_t *)buf, len);
 
   va_end(args); 						//args 목록 초기화
-
 
   return ret;
 
