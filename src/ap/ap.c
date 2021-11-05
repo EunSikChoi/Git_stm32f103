@@ -42,7 +42,13 @@ void apMain(void)
 		pre_time = millis();
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 
-		uartPrintf(_DEF_UART1, "reset Count %d\n", resetGetCount());
+		if(GPIOC->ODR & (1<<13))
+		{
+			uartPrintf(_DEF_UART1, "TOGGLE: %d\n", pre_time);
+		}
+
+
+
 	  }
 
 	}
