@@ -146,7 +146,7 @@ uint32_t uartWrite(uint8_t ch, uint8_t *p_data, uint32_t length)
   switch(ch)
   {
     case _DEF_UART1:
-    	ret = cdcWrite(p_data, length);
+    //	ret = cdcWrite(p_data, length); // not use in DFU
     break;
 
     case _DEF_UART2:

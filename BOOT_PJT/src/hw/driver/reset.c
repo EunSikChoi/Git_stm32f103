@@ -19,7 +19,7 @@ bool resetInit(void)
  //Reset 핀이 눌리면//
  if(RCC->CSR & (1<<26))
  {
-   rtcbackupRegWrite(1, rtcbackupRegRead(1) + 1); // 1- 10번 주소에 Write 가능 //
+   rtcbackupRegWrite(1, rtcbackupRegRead(1) + 1);
    delay(500);
    reset_count = rtcbackupRegRead(1);
 
@@ -27,7 +27,30 @@ bool resetInit(void)
 
  rtcbackupRegWrite(1, 0);
 
- return ret;
+
+ if (reset_count != 2)
+ {
+   void (**jump_func)() = (void (**)())(0x8007800 + 4);
+
+   if ((uint32_t)(*jump_func) != 0xFFFFFFFF)
+   {
+     HAL_RCC_DeInit();
+     HAL_DeInit();
+
+     for (int i=0; i<8; i++)
+     {
+       NVIC->ICER[i] = 0xFFFFFFFF;
+       __DSB();
+       __ISB();
+     }
+     SysTick->CTRL = 0;
+
+     (*jump_func)();
+   }
+ }
+
+
+  return ret;
 
 }
 
