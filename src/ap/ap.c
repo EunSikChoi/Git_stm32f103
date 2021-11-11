@@ -45,7 +45,7 @@ void apMain(void)
 		if(GPIOC->ODR & (1<<13))
 		{
 			uartPrintf(_DEF_UART1, "TOGGLE: %d\n", pre_time);
-		}
+		}//TEST//
 
 
 
