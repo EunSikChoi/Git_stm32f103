@@ -8,6 +8,8 @@
 
 #include "ap.h"
 #include "usbd_cdc_if.h"
+#include "reset.h"
+#include "rtc.h"
 
 extern uint32_t cdcAvailable(void);
 extern uint8_t cdcRead(void);
@@ -19,6 +21,9 @@ void apInit(void)
 {
   uartOpen(_DEF_UART1, 57600);
   uartOpen(_DEF_UART2, 57600);
+
+  cliOpen(_DEF_UART1, 57600);
+
 }
 
 
@@ -38,7 +43,8 @@ void apMain(void)
 		uartPrintf(_DEF_UART2, "reset Count %d\n", resetGetCount());
 
 	  }
-	}
 
+  	cliMain();
+	}
 
 }

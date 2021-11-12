@@ -6,18 +6,24 @@
  */
 
 #include "hw.h"
+#include "ap.h"
 
 void hwInit(void)
 {
 
   bspInit();
-  rtcInit();
   resetInit();
+
+  rtcInit();
+
+
 
   ledInit();
   usbInit();
 
   uartInit();
+
+  cliInit();
 
   flashInit();
 

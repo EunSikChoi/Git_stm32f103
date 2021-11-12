@@ -30,7 +30,7 @@ bool resetInit(void)
 
  if (reset_count != 2)
  {
-   void (**jump_func)() = (void (**)())(0x8007800 + 4);
+   void (**jump_func)() = (void (**)())(0x8006000 + 4);
 
    if ((uint32_t)(*jump_func) != 0xFFFFFFFF)
    {

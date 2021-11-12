@@ -20,10 +20,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_dfu_if.h"
-#include "flash.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+#include "flash.h"
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/

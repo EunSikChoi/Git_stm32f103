@@ -149,7 +149,6 @@ __ALIGN_BEGIN static uint8_t USBD_CDC_DeviceQualifierDesc[USB_LEN_DEV_QUALIFIER_
 /** @defgroup USBD_CDC_Private_Variables
   * @{
   */
-
 extern uint8_t USBD_CDC_SOF(struct _USBD_HandleTypeDef *pdev);
 
 /* CDC interface class callbacks structure */

@@ -17,6 +17,7 @@
 #include "led.h"
 #include "usb.h"
 #include "reset.h"
+#include "cli.h"
 
 
 

@@ -14,14 +14,7 @@
       <ProjectName>cube_f103</ProjectName>
       <ProjectNature>C</ProjectNature>
       <Secure />
-      <filestoremove>
-        <file>
-          <name>USB_DEVICE\App\usbd_cdc_if.c</name>
-        </file>
-        <file>
-          <name>Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Src\usbd_cdc.c</name>
-        </file>
-      </filestoremove>
+      <filestoremove />
       <sourceEntriesToRemove>
         <sourceEntry />
       </sourceEntriesToRemove>
@@ -80,9 +73,7 @@
             <Aincludes>
               <include />
             </Aincludes>
-            <Cincludes>
-              <include>Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc</include>
-            </Cincludes>
+            <Cincludes />
           </inctoremove>
         </config>
       </configs>
