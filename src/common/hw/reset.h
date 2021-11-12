@@ -18,6 +18,7 @@
 
 bool resetInit(void);
 uint32_t resetGetCount(void);
+void     resetToSysBoot(void);
 
 
 #endif

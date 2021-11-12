@@ -29,7 +29,7 @@ void apMain(void)
 
     pre_time = millis();
 
-    if(resetGetCount() >= 2)
+    if(resetGetCount() != 2)
     {
       led_blink_time = 200;
     }
@@ -39,6 +39,9 @@ void apMain(void)
 
 	  if(millis()-pre_time >= led_blink_time)
 	  {
+
+		uartPrintf(_DEF_UART1, "KEY: %d\n", resetGetCount() );
+
 		pre_time = millis();
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 
